@@ -1,5 +1,5 @@
 # Path to your oh-my-zsh configuration.
-export ZSH=$HOME/.oh-my-zsh
+export ZSH=$HOME/.zsh
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
@@ -24,7 +24,7 @@ export DISABLE_AUTO_UPDATE="true"
 plugins=(git github git-flow cap gem lol zsh-syntax-highlighting)
 
 source /etc/profile
-source $ZSH/oh-my-zsh.sh
+source $ZSH/my-zshrc.sh
 
 unsetopt nomatch
 
