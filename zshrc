@@ -77,4 +77,4 @@ fi
 
 alias nogit="disable_git_prompt_info"
 
-PATH=~/bin/:~/node_modules/.bin/:$PATH
+PATH=~/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin
