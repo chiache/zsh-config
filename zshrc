@@ -82,3 +82,6 @@ PATH=~/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin
 if [[ -n $RUNTHISCOMMAND ]] then
    $RUNTHISCOMMAND
 fi
+
+# Just for fun, create shit as colored git
+alias shit="git -c color.ui=true"
