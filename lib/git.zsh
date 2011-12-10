@@ -1,5 +1,13 @@
 # get the name of the branch we are on
 
+# Enable auto-execution of functions.
+typeset -ga preexec_functions
+typeset -ga chpwd_functions
+
+# Append git functions needed for prompt.
+preexec_functions+='preexec_update_git_prompt_info'
+chpwd_functions+='enable_git_prompt_info'
+
 function update_git_prompt_info() {
   top=$(git rev-parse --show-toplevel) || return
   ref=$(git symbolic-ref HEAD 2> /dev/null) || \
@@ -12,15 +20,37 @@ function update_git_prompt_info() {
 function git_prompt_info() {
   [[ "$GIT_PROMPT_DISABLED" != "" ]] && return
   top=$(git rev-parse --show-toplevel 2> /dev/null) || return
-  #([ ! -f "$top/.git/prompt-info" ] ||
-  # [ "$top/.git/prompt-info" -ot "$top/.git/HEAD" ] ||
-  # find "$top" -path "$top/.git" -prune -cnewer "$top/.git/prompt-info" -quit 2> /dev/null) &&
-  update_git_prompt_info
+  if [[ "$GIT_UPDATE_PROMPT_DISABLED" == "" ]]; then
+    ([ ! -f "$top/.git/prompt-info" ] || 
+     [ "$top/.git/prompt-info" -ot "$top/.git/HEAD" ]) &&
+    (update_git_prompt_info;
+     disable_update_git_prompt_info)
+  fi
   cat $top/.git/prompt-info 2> /dev/null
+}
+
+function preexec_update_git_prompt_info() {
+  case "$2" in
+    git*|ls|vi*|gedit)
+        enable_update_git_prompt_info
+        ;;
+  esac
 }
 
 function disable_git_prompt_info() {
   GIT_PROMPT_DISABLED=1
+}
+
+function enable_git_prompt_info() {
+  unset GIT_PROMPT_DISABLED
+}
+
+function disable_update_git_prompt_info() {
+  GIT_UPDATE_PROMPT_DISABLED=1
+}
+
+function enable_update_git_prompt_info() {
+  unset GIT_UPDATE_PROMPT_DISABLED
 }
 
 # Checks if working tree is dirty
