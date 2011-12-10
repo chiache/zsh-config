@@ -12,15 +12,29 @@ function update_git_prompt_info() {
 function git_prompt_info() {
   [[ "$GIT_PROMPT_DISABLED" != "" ]] && return
   top=$(git rev-parse --show-toplevel 2> /dev/null) || return
-  ([ ! -f "$top/.git/prompt-info" ] ||
-   [ "$top/.git/prompt-info" -ot "$top/.git/HEAD" ] ||
-   find "$top" -path "$top/.git" -prune -cnewer "$top/.git/prompt-info" -quit 2> /dev/null) &&
-  update_git_prompt_info
-  cat $top/.git/prompt-info 2> /dev/null
+  if [[ "$GIT_UPDATE_PROMPT_DISABLED" == "" ]]; then
+    ([ ! -f "$top/.git/prompt-info" ] ||
+     [ "$top/.git/prompt-info" -ot "$top/.git/HEAD" ] ||
+     find "$top" -path "$top/.git" -prune -cnewer "$top/.git/prompt-info" -quit 2> /dev/null) &&
+    update_git_prompt_info
+  fi
+  cat $top/.git/prompt-info 2> /dev/null || return
 }
 
 function disable_git_prompt_info() {
   GIT_PROMPT_DISABLED=1
+}
+
+function enable_git_prompt_info() {
+  GIT_PROMPT_DISABLED=
+}
+
+function disable_update_git_prompt_info() {
+  GIT_UPDATE_PROMPT_DISABLED=1
+}
+
+function enable_update_git_prompt_info() {
+  GIT_UPDATE_PROMPT_DISABLED=
 }
 
 # Checks if working tree is dirty
