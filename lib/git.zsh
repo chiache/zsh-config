@@ -8,20 +8,20 @@ typeset -ga chpwd_functions
 # Append git functions needed for prompt.
 preexec_functions+='preexec_update_git_prompt_info'
 precmd_functions+='precmd_update_git_prompt_info'
-chpwd_functions+='update_git_prompt_info'
+chpwd_functions+='chpwd_update_git_prompt_info'
 
 function update_git_prompt_info() {
-  top=$(git rev-parse --show-toplevel) || return
+  [[ "$GIT_TOPLEVEL" == "" ]] && return
   ref=$(git symbolic-ref HEAD 2> /dev/null) || \
   ref=$(git describe --tags --exact-match HEAD 2> /dev/null) || \
   ref=$(git rev-parse --short HEAD 2> /dev/null) || \
   return
-  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref##*/}$(git_prompt_status)$ZSH_THEME_GIT_PROMPT_SUFFIX" > $top/.git/prompt-info
+  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref##*/}$(git_prompt_status)$ZSH_THEME_GIT_PROMPT_SUFFIX" > $GIT_TOPLEVEL/.git/prompt-info
 }
 
 function git_prompt_info() {
   [[ "$GIT_PROMPT_DISABLED" != "" ]] && return
-  top=$(git rev-parse --show-toplevel 2> /dev/null) || return
+  [[ "$GIT_TOPLEVEL" == "" ]] && return
   if [ ! -f "$top/.git/prompt-info" ]; then
     disable_update_git_prompt_info
     update_git_prompt_info
@@ -30,17 +30,27 @@ function git_prompt_info() {
 }
 
 function preexec_update_git_prompt_info() {
+  [[ "$GIT_TOPLEVEL" == "" ]] && return
   case "$1" in
-    git*|vi*|emac|*make)
+    git*|vi*|emac|make)
         enable_update_git_prompt_info
         ;;
   esac
 }
 
 function precmd_update_git_prompt_info() {
-  top=$(git rev-parse --show-toplevel 2> /dev/null) || return
+  [[ "$GIT_TOPLEVEL" == "" ]] && return
   if [[ "$GIT_UPDATE_PROMPT_DISABLED" == "" ]]; then
     disable_update_git_prompt_info
+    update_git_prompt_info
+  fi
+}
+
+function chpwd_update_git_prompt_info() {
+  top=$(git rev-parse --show-toplevel 2> /dev/null) || unset GIT_TOPLEVEL
+  disable_update_git_prompt_info
+  if [[ "$GIT_TOPLEVEL" != "$top" ]]; then
+    GIT_TOPLEVEL="$top"
     update_git_prompt_info
   fi
 }
