@@ -2,6 +2,19 @@ function zsh_stats() {
   history | awk '{print $2}' | sort | uniq -c | sort -rn | head
 }
 
+function jobs_status() {
+  [[ "$(jobs)" == "" ]] && return
+  jobs_str=
+  jobs 2> /dev/null | while read job; do
+    id="$(expr match "$job" '\[\([0-9]*\)\]')"
+    [ "$id" == "" ] && continue
+    nm="$(expr match "$job" '.*  \(.*\)')"
+    [ ${#nm} -gt 10 ] && nm="$(expr match "$nm" '\(..\)')..$(expr match "$nm" '.*\(.......\)')"
+    jobs_str="$jobs_str $id:$nm"
+  done
+  echo "(${jobs_str# }) "
+}
+
 function uninstall_oh_my_zsh() {
   /bin/sh $ZSH/tools/uninstall.sh
 }

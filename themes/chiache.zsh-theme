@@ -1,5 +1,5 @@
 PROMPT='%(?,,%{$fg[red]%} -- exit %{(%}$?%) -- %{$reset_color%}
-)%(!.%{$fg_bold[red]%}.%{$fg_bold[green]%})%m %{$fg_bold[blue]%}%(!.%1~.%20<..<%~%<<) $(git_prompt_info)%#%{$reset_color%} '
+)%(!.%{$fg_bold[red]%}.%{$fg_bold[green]%})%m %{$fg_bold[blue]%}%(!.%1~.%20<..<%~%<<) $(jobs_status)$(git_prompt_info)%#%{$reset_color%} '
 RPROMPT='%{$fg_no_bold[blue]%}[%*]%{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_PREFIX="["
