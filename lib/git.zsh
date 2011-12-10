@@ -2,10 +2,12 @@
 
 # Enable auto-execution of functions.
 typeset -ga preexec_functions
+typeset -ga precmd_functions
 typeset -ga chpwd_functions
 
 # Append git functions needed for prompt.
 preexec_functions+='preexec_update_git_prompt_info'
+precmd_functions+='precmd_update_git_prompt_info'
 chpwd_functions+='enable_git_prompt_info'
 
 function update_git_prompt_info() {
@@ -20,21 +22,27 @@ function update_git_prompt_info() {
 function git_prompt_info() {
   [[ "$GIT_PROMPT_DISABLED" != "" ]] && return
   top=$(git rev-parse --show-toplevel 2> /dev/null) || return
-  if [[ "$GIT_UPDATE_PROMPT_DISABLED" == "" ]]; then
-    ([ ! -f "$top/.git/prompt-info" ] || 
-     [ "$top/.git/prompt-info" -ot "$top/.git/HEAD" ]) &&
-    (update_git_prompt_info;
-     disable_update_git_prompt_info)
+  if [ ! -f "$top/.git/prompt-info" ]; then
+    disable_update_git_prompt_info
+    update_git_prompt_info
   fi
   cat $top/.git/prompt-info 2> /dev/null
 }
 
 function preexec_update_git_prompt_info() {
-  case "$2" in
-    git*|ls|vi*|gedit)
+  case "$1" in
+    git*|vi*|emac|*make)
         enable_update_git_prompt_info
         ;;
   esac
+}
+
+function precmd_update_git_prompt_info() {
+  top=$(git rev-parse --show-toplevel 2> /dev/null) || return
+  if [[ "$GIT_UPDATE_PROMPT_DISABLED" == "" ]]; then
+    disable_update_git_prompt_info
+    update_git_prompt_info
+  fi
 }
 
 function disable_git_prompt_info() {
