@@ -8,7 +8,7 @@ typeset -ga chpwd_functions
 # Append git functions needed for prompt.
 preexec_functions+='preexec_update_git_prompt_info'
 precmd_functions+='precmd_update_git_prompt_info'
-chpwd_functions+='enable_git_prompt_info'
+chpwd_functions+='update_git_prompt_info'
 
 function update_git_prompt_info() {
   top=$(git rev-parse --show-toplevel) || return
