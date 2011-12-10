@@ -12,9 +12,9 @@ function update_git_prompt_info() {
 function git_prompt_info() {
   [[ "$GIT_PROMPT_DISABLED" != "" ]] && return
   top=$(git rev-parse --show-toplevel 2> /dev/null) || return
-  ([ ! -f "$top/.git/prompt-info" ] ||
-   [ "$top/.git/prompt-info" -ot "$top/.git/HEAD" ] ||
-   find "$top" -path "$top/.git" -prune -cnewer "$top/.git/prompt-info" -quit 2> /dev/null) &&
+  #([ ! -f "$top/.git/prompt-info" ] ||
+  # [ "$top/.git/prompt-info" -ot "$top/.git/HEAD" ] ||
+  # find "$top" -path "$top/.git" -prune -cnewer "$top/.git/prompt-info" -quit 2> /dev/null) &&
   update_git_prompt_info
   cat $top/.git/prompt-info 2> /dev/null
 }
