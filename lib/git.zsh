@@ -1,14 +1,22 @@
 # get the name of the branch we are on
-function git_prompt_info() {
-  [[ "$GIT_PROMPT_DISABLED" != "" ]] && return
+
+function update_git_prompt_info() {
   top=$(git rev-parse --show-toplevel) || return
-  [ "$top/.git/prompt-info" -nt "$top" ] && cat "$top/.git/prompt-info" && return
   ref=$(git symbolic-ref HEAD 2> /dev/null) || \
   ref=$(git describe --tags --exact-match HEAD 2> /dev/null) || \
   ref=$(git rev-parse --short HEAD 2> /dev/null) || \
   return
   echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref##*/}$(git_prompt_status)$ZSH_THEME_GIT_PROMPT_SUFFIX" > $top/.git/prompt-info
-  cat $top/.git/prompt-info
+}
+
+function git_prompt_info() {
+  [[ "$GIT_PROMPT_DISABLED" != "" ]] && return
+  top=$(git rev-parse --show-toplevel 2> /dev/null) || return
+  ([ ! -f "$top/.git/prompt-info" ] ||
+   [ "$top/.git/prompt-info" -ot "$top/.git/HEAD" ] ||
+   find "$top" -path "$top/.git" -prune -cnewer "$top/.git/prompt-info" -quit 2> /dev/null) &&
+  update_git_prompt_info
+  cat $top/.git/prompt-info 2> /dev/null
 }
 
 function disable_git_prompt_info() {
