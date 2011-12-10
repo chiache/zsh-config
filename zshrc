@@ -75,6 +75,10 @@ if [[ -x `which hitch` ]]; then
 	hitch
 fi
 
+alias ls="ls --color=always"
+alias grep="grep --color=always"
+alias less="less -r"
+
 alias nogit="disable_git_prompt_info"
 
 PATH=~/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin
