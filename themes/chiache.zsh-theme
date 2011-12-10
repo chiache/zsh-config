@@ -1,4 +1,4 @@
-PROMPT='%(?,,%{$fg[red]%} -- exit %{(%}$?%) -- %{$reset_color%}
+PROMPT='%(?,,%{$fg[red]%} -- exit %{(%}$(errno_info $?)%) -- %{$reset_color%}
 )%(!.%{$fg_bold[red]%}.%{$fg_bold[green]%})%m %{$fg_bold[blue]%}%(!.%1~.%20<..<%~%<<) $(jobs_status)$(git_prompt_info)%#%{$reset_color%} '
 RPROMPT='%{$fg_no_bold[blue]%}[%*]%{$reset_color%}'
 

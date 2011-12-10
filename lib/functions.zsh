@@ -63,3 +63,27 @@ function extract() {
   fi
 }
 
+errno() {
+  if which gcc >/dev/null; then
+    # Header finding trick from Kees Cook <kees@ubuntu.com>
+    headers=$(echo "#include <asm/errno.h>" | gcc -E - | grep --color=none "\.h" | awk -F\" '{print $2}' | sort -u)
+  else
+    headers="/usr/include/asm-generic/errno*.h"
+  fi
+
+  code="$1"
+
+  if [ "$code" -le 0 -o "$code" -ge 0 ] 2>/dev/null; then
+    # Input is a number, search for a particular matching code
+    sed -n "s,^#define\s\+[^[:space:]]\+\s\+${code}\s\+\/\*\s\+\(.*\)\s\+\*\/,\1,p" $(echo $headers)
+  else
+    # Input is not a number, search for any matching strings
+    sed -n "s,^#define\s\+\(.*${code}.*\),\1,Ip" $(echo $headers)
+  fi
+}
+
+errno_info() {
+  echo -n $1
+  info=$(errno $1)
+  [ "$info" != "" ] && echo " - $info"
+}
