@@ -88,4 +88,5 @@ if [[ -n $RUNTHISCOMMAND ]] then
 fi
 
 # Just for fun, create shit as colored git
-alias shit="git -c color.ui=true"
+shit() { git -c color.ui=true $@ }
+compdef shit=git
