@@ -1,24 +1,58 @@
 # get the name of the branch we are on
 
+# Enable auto-execution of functions.
+typeset -ga preexec_functions
+typeset -ga precmd_functions
+typeset -ga chpwd_functions
+
+# Append git functions needed for prompt.
+preexec_functions+='preexec_update_git_prompt_info'
+precmd_functions+='precmd_update_git_prompt_info'
+chpwd_functions+='chpwd_update_git_prompt_info'
+
 function update_git_prompt_info() {
-  top=$(git rev-parse --show-toplevel) || return
+  [[ "$GIT_TOPLEVEL" == "" ]] && return
   ref=$(git symbolic-ref HEAD 2> /dev/null) || \
   ref=$(git describe --tags --exact-match HEAD 2> /dev/null) || \
   ref=$(git rev-parse --short HEAD 2> /dev/null) || \
   return
-  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref##*/}$(git_prompt_status)$ZSH_THEME_GIT_PROMPT_SUFFIX" > $top/.git/prompt-info
+  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref##*/}$(git_prompt_status)$ZSH_THEME_GIT_PROMPT_SUFFIX" > $GIT_TOPLEVEL/.git/prompt-info
 }
 
 function git_prompt_info() {
   [[ "$GIT_PROMPT_DISABLED" != "" ]] && return
-  top=$(git rev-parse --show-toplevel 2> /dev/null) || return
-  if [[ "$GIT_UPDATE_PROMPT_DISABLED" == "" ]]; then
-    ([ ! -f "$top/.git/prompt-info" ] ||
-     [ "$top/.git/prompt-info" -ot "$top/.git/HEAD" ] ||
-     find "$top" -path "$top/.git" -prune -cnewer "$top/.git/prompt-info" -quit 2> /dev/null) &&
+  [[ "$GIT_TOPLEVEL" == "" ]] && return
+  if [ ! -f "$top/.git/prompt-info" ]; then
+    disable_update_git_prompt_info
     update_git_prompt_info
   fi
-  cat $top/.git/prompt-info 2> /dev/null || return
+  cat $top/.git/prompt-info 2> /dev/null
+}
+
+function preexec_update_git_prompt_info() {
+  [[ "$GIT_TOPLEVEL" == "" ]] && return
+  case "$1" in
+    git*|vi*|emac|make)
+        enable_update_git_prompt_info
+        ;;
+  esac
+}
+
+function precmd_update_git_prompt_info() {
+  [[ "$GIT_TOPLEVEL" == "" ]] && return
+  if [[ "$GIT_UPDATE_PROMPT_DISABLED" == "" ]]; then
+    disable_update_git_prompt_info
+    update_git_prompt_info
+  fi
+}
+
+function chpwd_update_git_prompt_info() {
+  top=$(git rev-parse --show-toplevel 2> /dev/null) || unset GIT_TOPLEVEL
+  disable_update_git_prompt_info
+  if [[ "$GIT_TOPLEVEL" != "$top" ]]; then
+    GIT_TOPLEVEL="$top"
+    update_git_prompt_info
+  fi
 }
 
 function disable_git_prompt_info() {
@@ -26,7 +60,7 @@ function disable_git_prompt_info() {
 }
 
 function enable_git_prompt_info() {
-  GIT_PROMPT_DISABLED=
+  unset GIT_PROMPT_DISABLED
 }
 
 function disable_update_git_prompt_info() {
@@ -34,7 +68,7 @@ function disable_update_git_prompt_info() {
 }
 
 function enable_update_git_prompt_info() {
-  GIT_UPDATE_PROMPT_DISABLED=
+  unset GIT_UPDATE_PROMPT_DISABLED
 }
 
 # Checks if working tree is dirty
