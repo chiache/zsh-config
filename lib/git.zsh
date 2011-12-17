@@ -24,7 +24,7 @@ function git_prompt_info() {
   [[ "$GIT_TOPLEVEL" == "" ]] && return
   if [ ! -f "$top/.git/prompt-info" ]; then
     disable_update_git_prompt_info
-    update_git_prompt_info
+    update_git_prompt_info &!
   fi
   cat $top/.git/prompt-info 2> /dev/null
 }
@@ -42,7 +42,7 @@ function precmd_update_git_prompt_info() {
   [[ "$GIT_TOPLEVEL" == "" ]] && return
   if [[ "$GIT_UPDATE_PROMPT_DISABLED" == "" ]]; then
     disable_update_git_prompt_info
-    update_git_prompt_info
+    update_git_prompt_info &!
   fi
 }
 
@@ -51,7 +51,7 @@ function chpwd_update_git_prompt_info() {
   disable_update_git_prompt_info
   if [[ "$GIT_TOPLEVEL" != "$top" ]]; then
     GIT_TOPLEVEL="$top"
-    update_git_prompt_info
+    update_git_prompt_info &!
   fi
 }
 
