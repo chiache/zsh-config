@@ -33,3 +33,7 @@ case ${parent_process_name##*/} in
         tmux set -g default-shell zsh &&
         exec zsh;;
 esac
+export LANGUAGE="en_US:en"
+export LC_MESSAGES="en_US.UTF-8"
+export LC_CTYPE="en_US.UTF-8"
+export LC_COLLATE="en_US.UTF-8"

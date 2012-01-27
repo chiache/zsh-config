@@ -83,8 +83,8 @@ alias nogit="disable_git_prompt_info"
 
 PATH=~/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin
 
-if [[ -n $RUNTHISCOMMAND ]] then
-   $RUNTHISCOMMAND
+if [[ -n "$RUNTHISCOMMAND" ]] then
+   eval $RUNTHISCOMMAND
 fi
 
 # Just for fun, create shit as colored git
