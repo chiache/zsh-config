@@ -63,20 +63,6 @@ bindkey "\e[1;5C" forward-word
 
 alias noh="unsetopt sharehistory"
 
-unsetopt auto_name_dirs # rvm_rvmrc_cwd fix
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm"  # This loads RVM into a shell session.
-unset RUBYOPT
-cd . # to rvm reload
-
-if [[ -x `which hitch` ]]; then
-	hitch() {
-		command hitch "$@"
-		if [[ -s "$HOME/.hitch_export_authors" ]] ; then source "$HOME/.hitch_export_authors" ; fi
-	}
-	alias unhitch='hitch -u'
-	hitch
-fi
-
 alias ls="ls --color=always"
 alias grep="grep --color=always"
 alias less="less -r"
@@ -87,6 +73,3 @@ if [[ -n "$RUNTHISCOMMAND" ]] then
    eval $RUNTHISCOMMAND
 fi
 
-# Just for fun, create shit as colored git
-shit() { git -c color.ui=true $@ }
-compdef shit=git
