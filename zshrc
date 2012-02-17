@@ -1,6 +1,8 @@
 # Path to your oh-my-zsh configuration.
 export ZSH=$HOME/.zsh
 
+PATH=~/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin
+
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
@@ -80,8 +82,6 @@ alias grep="grep --color=always"
 alias less="less -r"
 
 alias nogit="disable_git_prompt_info"
-
-PATH=~/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin
 
 if [[ -n "$RUNTHISCOMMAND" ]] then
    eval $RUNTHISCOMMAND
