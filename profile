@@ -9,13 +9,6 @@
 #umask 022
 
 # if running bash
-if [ -n "$BASH_VERSION" ]; then
-    # include .bashrc if it exists
-    if [ -f "$HOME/.bashrc" ]; then
-	. "$HOME/.bashrc"
-    fi
-fi
-
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] ; then
     PATH="$HOME/bin:$PATH"
@@ -27,12 +20,27 @@ case ${parent_process_name##*/} in
           if tmux has-session -t 0; then
             exec tmux attach-session -t 0
           else
+            type zsh >/dev/null 2>/dev/null &&
+            tmux set -g default-shell zsh
             exec tmux new-session -s 0
           fi;;
   tmux) type zsh >/dev/null 2>/dev/null &&
         tmux set -g default-shell zsh &&
         exec zsh;;
 esac
+
+if [ -n "$BASH_VERSION" ]; then
+    # include /etc/bashrc if it exists
+    if [ -f "/etc/bashrc" ]; then
+        . "/etc/bashrc"
+    fi
+
+    # include .bashrc if it exists
+    if [ -f "$HOME/.bashrc" ]; then
+        . "$HOME/.bashrc"
+    fi
+fi
+
 export LANGUAGE="en_US:en"
 export LC_MESSAGES="en_US.UTF-8"
 export LC_CTYPE="en_US.UTF-8"
