@@ -47,12 +47,14 @@ function precmd_update_git_prompt_info() {
 }
 
 function chpwd_update_git_prompt_info() {
+  unsetopt AUTO_NAME_DIRS
   top=$(git rev-parse --show-toplevel 2> /dev/null) || unset GIT_TOPLEVEL
   disable_update_git_prompt_info
   if [[ "$GIT_TOPLEVEL" != "$top" ]]; then
     GIT_TOPLEVEL="$top"
     update_git_prompt_info &!
   fi
+  setopt AUTO_NAME_DIRS
 }
 
 function disable_git_prompt_info() {
