@@ -71,6 +71,10 @@ errno() {
     headers="/usr/include/asm-generic/errno*.h"
   fi
 
+  if [ ! -f "$(echo $headers)" ] 2>/dev/null; then
+    return
+  fi  
+
   code="$1"
 
   if [ "$code" -le 0 -o "$code" -ge 0 ] 2>/dev/null; then

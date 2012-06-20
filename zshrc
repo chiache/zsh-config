@@ -63,7 +63,7 @@ bindkey "\e[1;5C" forward-word
 
 alias noh="unsetopt sharehistory"
 
-alias ls="ls --color=always"
+#alias ls="ls --color=always"
 alias grep="grep --color=always"
 alias less="less -r"
 
