@@ -73,3 +73,4 @@ if [[ -n "$RUNTHISCOMMAND" ]] then
    eval $RUNTHISCOMMAND
 fi
 
+export TMUX_SHELL=$(which zsh)

@@ -66,7 +66,7 @@ function extract() {
 errno() {
   if which gcc >/dev/null; then
     # Header finding trick from Kees Cook <kees@ubuntu.com>
-    headers=$(echo "#include <asm/errno.h>" | gcc -E - | grep --color=none "\.h" | awk -F\" '{print $2}' | sort -u)
+    headers=$(echo "#include <asm/errno.h>" | gcc -E - 2>/dev/null | grep --color=none "\.h" | awk -F\" '{print $2}' | sort -u)
   else
     headers="/usr/include/asm-generic/errno*.h"
   fi
