@@ -56,6 +56,11 @@ ZSH_HIGHLIGHT_STYLES+=(
   assign                        'none'
 )
 
+#a optimization for git, I don't know how it work
+__git_files () {
+    _wanted files expl ‘local files’ _files 
+}
+
 #bindkey "\e[H" beginning-of-line
 #bindkey "\e[F" end-of-line
 bindkey "\e[1;5D" backward-word
