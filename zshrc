@@ -58,7 +58,7 @@ ZSH_HIGHLIGHT_STYLES+=(
 
 #a optimization for git, I don't know how it work
 __git_files () {
-    _wanted files expl ‘local files’ _files 
+    _wanted files expl 'local files' _files 
 }
 
 #bindkey "\e[H" beginning-of-line
