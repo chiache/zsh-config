@@ -16,6 +16,8 @@ function update_git_prompt_info() {
   ref=$(git describe --tags --exact-match HEAD 2> /dev/null) || \
   ref=$(git rev-parse --short HEAD 2> /dev/null) || \
   return
+
+  touch $GIT_TOPLEVEL/.git/prompt-info 2> /dev/null | return
   echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref##*/}$(git_prompt_status)$ZSH_THEME_GIT_PROMPT_SUFFIX" > $GIT_TOPLEVEL/.git/prompt-info
 }
 
