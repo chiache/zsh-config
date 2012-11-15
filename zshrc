@@ -69,7 +69,7 @@ bindkey "\e[1;5C" forward-word
 alias noh="unsetopt sharehistory"
 
 #alias ls="ls --color=always"
-alias grep="grep --color=always"
+alias grep="grep --color=auto"
 alias less="less -r"
 
 alias nogit="disable_git_prompt_info"

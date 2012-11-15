@@ -11,14 +11,13 @@ precmd_functions+='precmd_update_git_prompt_info'
 chpwd_functions+='chpwd_update_git_prompt_info'
 
 function update_git_prompt_info() {
-  [[ "$GIT_TOPLEVEL" == "" ]] && return
-  ref=$(git symbolic-ref HEAD 2> /dev/null) || \
-  ref=$(git describe --tags --exact-match HEAD 2> /dev/null) || \
-  ref=$(git rev-parse --short HEAD 2> /dev/null) || \
-  return
+  ([ -n "$GIT_TOPLEVEL" ] && [ -w "$GIT_TOPLEVEL" ]) || return
+  ref=$(git symbolic-ref HEAD 2> /dev/null || \
+        git describe --tags --exact-match HEAD 2> /dev/null || \
+        git rev-parse --short HEAD 2> /dev/null || \
+        return)
 
-  touch $GIT_TOPLEVEL/.git/prompt-info 2> /dev/null | return
-  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref##*/}$(git_prompt_status)$ZSH_THEME_GIT_PROMPT_SUFFIX" > $GIT_TOPLEVEL/.git/prompt-info
+  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref##*/}$(git_prompt_status)$ZSH_THEME_GIT_PROMPT_SUFFIX" > $GIT_TOPLEVEL/.git/prompt-info 2> /dev/null
 }
 
 function git_prompt_info() {
