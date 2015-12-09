@@ -1,7 +1,7 @@
 # Path to your oh-my-zsh configuration.
 export ZSH=$HOME/.zsh
 
-PATH=~/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin
+PATH+=:~/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin
 
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
