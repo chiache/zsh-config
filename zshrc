@@ -7,11 +7,7 @@ PATH+=:~/bin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/usr/bin:/sbin:/bin
 # Look in ~/.oh-my-zsh/themes/
 # Optionally, if you set this to "random", it'll load a random theme each
 # time that oh-my-zsh is loaded.
-if [[ `uname` == 'FreeBSD' ]]; then
-	export ZSH_THEME="chiache-freebsd"
-else
-	export ZSH_THEME="chiache"
-fi
+export ZSH_THEME="murilasso_mod"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
